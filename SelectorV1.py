@@ -96,7 +96,7 @@ def selectedNum(num):
             modes[9] = False
             response = ("apaga")
             print(response)
-            
+             
     elif num == 0:
         root.quit()  
 
