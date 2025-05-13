@@ -3,23 +3,100 @@ from tkinter import simpledialog
 import keyboard
 import subprocess
 import os
-
+from selenium import webdriver
 
 root = tk.Tk()
 root.withdraw()  
 
+modes = {
+        1: False, 2: False, 3: False, 4: False, 5: False,
+        6: False, 7: False, 8: False, 9: False, 0: False
+    }
+
 
 def selectedNum(num):
-    print(f"Function received number: {num}")
     if num == 1:
-      subprocess.Popen([r"C:\Riot Games\Riot Client\RiotClientServices.exe"], shell=True)
+        if  modes[1]== False:
+            response = ("Prende")
+            print(response)
+            modes[1] = True
+        else:
+            modes[1] = False
+            response = ("apaga")
+            print(response)
     elif num == 2:
-        os.system("taskkill /f /im LeagueClient.exe")
-        os.system("taskkill /f /im League of Legends.exe")
-        os.system("taskkill /f /im RiotClientServices.exe")
-        for process in processes:
-            os.system(f'taskkill /f /im "{process}" >nul 2>&1"')
-
+        if  modes[2]== False:
+            response = ("Prende")
+            print(response)
+            modes[2] = True
+        else:
+            modes[2] = False
+            response = ("apaga")
+            print(response)
+    elif num == 3:
+        if  modes[3]== False:
+            response = ("Prende")
+            print(response)
+            modes[3] = True
+        else:
+            modes[3] = False
+            response = ("apaga")
+            print(response)
+    elif num == 4:
+        if  modes[4]== False:
+            response = ("Prende")
+            print(response)
+            modes[4] = True
+        else:
+            modes[4] = False
+            response = ("apaga")
+            print(response)
+    elif num == 5:
+        if  modes[5]== False:
+            response = ("Prende")
+            print(response)
+            modes[5] = True
+        else:
+            modes[5] = False
+            response = ("apaga")
+            print(response) 
+    elif num == 6:
+        if  modes[6]== False:
+            response = ("Prende")
+            print(response)
+            modes[6] = True
+        else:
+            modes[6] = False
+            response = ("apaga")
+            print(response)
+    elif num == 7:
+        if  modes[7]== False:
+            response = ("Prende")
+            print(response)
+            modes[7] = True
+        else:
+            modes[7] = False
+            response = ("apaga")
+            print(response)    
+    elif num == 8:
+        if  modes[8]== False:
+            response = ("Prende")
+            print(response)
+            modes[8] = True
+        else:
+            modes[8] = False
+            response = ("apaga")
+            print(response)
+    elif num == 9:
+        if  modes[9]== False:
+            response = ("Prende")
+            print(response)
+            modes[9] = True
+        else:
+            modes[9] = False
+            response = ("apaga")
+            print(response)
+            
     elif num == 0:
         root.quit()  
 
