@@ -3,6 +3,8 @@ from tkinter import simpledialog
 import keyboard
 import subprocess
 import os
+import mouse
+import time
 from selenium import webdriver
 
 root = tk.Tk()
@@ -35,8 +37,10 @@ def selectedNum(num):
             print(response)
     elif num == 3:
         if  modes[3]== False:
-            response = ("Prende")
-            print(response)
+            time.sleep(1)
+            for x in range(19000):
+                mouse.click()
+                time.sleep(0.00001)
             modes[3] = True
         else:
             modes[3] = False
