@@ -1,147 +1,118 @@
 import tkinter as tk
-from tkinter import simpledialog
+from tkinter import ttk
 import keyboard
-import subprocess
-import os
 import mouse
 import time
-from selenium import webdriver
+from ctypes import windll
+import sys
 
-root = tk.Tk()
-root.withdraw()  
-
-modes = {
-        1: False, 2: False, 3: False, 4: False, 5: False,
-        6: False, 7: False, 8: False, 9: False, 0: False
-    }
-
-
-def selectedNum(num):
-    if num == 1:
-        if  modes[1]== False:
-            response = ("Prende")
-            print(response)
-            modes[1] = True
-        else:
-            modes[1] = False
-            response = ("apaga")
-            print(response)
-    elif num == 2:
-        if  modes[2]== False:
-            response = ("Prende")
-            print(response)
-            modes[2] = True
-        else:
-            modes[2] = False
-            response = ("apaga")
-            print(response)
-    elif num == 3:
-        if  modes[3]== False:
-            time.sleep(1)
-            for x in range(19000):
-                mouse.click()
-                time.sleep(0.00001)
-            modes[3] = True
-        else:
-            modes[3] = False
-            response = ("apaga")
-            print(response)
-    elif num == 4:
-        if  modes[4]== False:
-            response = ("Prende")
-            print(response)
-            modes[4] = True
-        else:
-            modes[4] = False
-            response = ("apaga")
-            print(response)
-    elif num == 5:
-        if  modes[5]== False:
-            response = ("Prende")
-            print(response)
-            modes[5] = True
-        else:
-            modes[5] = False
-            response = ("apaga")
-            print(response) 
-    elif num == 6:
-        if  modes[6]== False:
-            response = ("Prende")
-            print(response)
-            modes[6] = True
-        else:
-            modes[6] = False
-            response = ("apaga")
-            print(response)
-    elif num == 7:
-        if  modes[7]== False:
-            response = ("Prende")
-            print(response)
-            modes[7] = True
-        else:
-            modes[7] = False
-            response = ("apaga")
-            print(response)    
-    elif num == 8:
-        if  modes[8]== False:
-            response = ("Prende")
-            print(response)
-            modes[8] = True
-        else:
-            modes[8] = False
-            response = ("apaga")
-            print(response)
-    elif num == 9:
-        if  modes[9]== False:
-            response = ("Prende")
-            print(response)
-            modes[9] = True
-        else:
-            modes[9] = False
-            response = ("apaga")
-            print(response)
-             
-    elif num == 0:
-        root.quit()  
-
-def show_input_box():
-    win = tk.Toplevel(root, padx=10, pady=10)
-    win.title("Quick Input")
-    win.geometry("100x75")
-    
-    # Force focus and bring to front
-    win.lift()
-    win.attributes("-topmost", True)
-    win.focus_force()
-    win.after(10, lambda: win.attributes("-topmost", False))  # Reset topmost so it behaves normally after
-
-    entry = tk.Entry(win)
-    entry.pack(pady=10)
-    entry.focus_set()
-
-    def handle():
+class ModernSelector:
+    def __init__(self):
+        self.root = tk.Tk()
+        self.root.withdraw()
+        
+        # Initialize modes dictionary
+        self.modes = {i: False for i in range(10)}
+        
+        # Set DPI awareness for crisp rendering
         try:
-            number = int(entry.get())
-            selectedNum(number)
+            windll.shcore.SetProcessDpiAwareness(1)
+        except:
+            pass
+
+    def create_popup(self):
+        # Destroy existing popup if it exists
+        try:
+            if hasattr(self, 'popup') and self.popup.winfo_exists():
+                self.popup.destroy()
+        except:
+            pass
+
+        # Create new popup
+        self.popup = tk.Toplevel(self.root)
+        self.popup.overrideredirect(True)  # Remove window decorations
+        
+        # Calculate center position
+        screen_width = self.popup.winfo_screenwidth()
+        screen_height = self.popup.winfo_screenheight()
+        window_width = 300
+        window_height = 60
+        x = (screen_width - window_width) // 2
+        y = (screen_height - window_height) // 2
+        
+        self.popup.geometry(f"{window_width}x{window_height}+{x}+{y}")
+        
+        # Create main frame with modern styling
+        main_frame = ttk.Frame(self.popup)
+        main_frame.pack(fill='both', expand=True)
+        
+        # Configure modern styles
+        style = ttk.Style()
+        style.configure("Modern.TEntry", padding=10)
+        
+        # Create and configure the entry widget
+        self.entry = ttk.Entry(main_frame, style="Modern.TEntry", font=('Segoe UI', 12))
+        self.entry.pack(fill='both', expand=True, padx=10, pady=10)
+        
+        # Focus and select all text
+        self.entry.focus_force()
+        
+        # Bind events
+        self.entry.bind('<Return>', self.handle_input)
+        self.entry.bind('<Escape>', lambda e: self.popup.destroy())
+        
+        # Make window stay on top
+        self.popup.attributes('-topmost', True)
+        
+        # Add subtle shadow effect
+        self.popup.configure(bg='#222222')
+        main_frame.configure(style='Modern.TFrame')
+
+    def handle_input(self, event=None):
+        try:
+            number = int(self.entry.get())
+            if 0 <= number <= 9:
+                self.execute_action(number)
+            else:
+                print("Please enter a number between 0-9")
         except ValueError:
-            print("Invalid number.")
-        win.destroy()
+            print("Invalid input. Please enter a number.")
+        finally:
+            self.popup.destroy()
 
-    win.bind("<Return>", lambda event: handle())
-    btn = tk.Button(win, text="OK", command=handle)
-    btn.pack()
+    def execute_action(self, num):
+        if num == 0:
+            self.root.quit()
+            return
 
-    
-    win.bind("<Return>", lambda event: handle())
+        self.modes[num] = not self.modes[num]
+        state = "activated" if self.modes[num] else "deactivated"
+        print(f"Mode {num} {state}")
 
-    btn = tk.Button(win, text="OK", command=handle)
-    btn.pack()
+        # Special action for mode 3 (auto-clicker)
+        if num == 3 and self.modes[num]:
+            try:
+                time.sleep(1)  # Brief delay before starting
+                for _ in range(19000):
+                    if not self.modes[num]:  # Check if mode was disabled
+                        break
+                    mouse.click()
+                    time.sleep(0.00001)
+            except Exception as e:
+                print(f"Error in auto-clicker: {e}")
 
-def trigger_popup():
-    root.after(0, show_input_box)
+    def run(self):
+        # Register global hotkey
+        keyboard.add_hotkey('shift+f12', self.create_popup, suppress=True)
+        print("Running... Press Shift + F12 to open selector.")
+        
+        try:
+            self.root.mainloop()
+        except Exception as e:
+            print(f"Error: {e}")
+        finally:
+            keyboard.unhook_all()
 
-keyboard.add_hotkey('shift+f12', trigger_popup)
-
-print("Running... Press Shift + F12 to trigger input.")
-root.mainloop()
-root.destroy()
+if __name__ == "__main__":
+    selector = ModernSelector()
+    selector.run()
