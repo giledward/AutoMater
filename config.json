@@ -1,0 +1,106 @@
+{
+    "modes": {
+        "0": {
+            "name": "Exit",
+            "type": "exit",
+            "description": "Exit the application"
+        },
+        "1": {
+            "name": "Chrome",
+            "type": "program",
+            "description": "Launch/Close Chrome",
+            "programs": [
+                {
+                    "program_path": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+                    "process_name": "chrome.exe"
+                }
+            ]
+        },
+        "2": {
+            "name": "Development Environment",
+            "type": "program",
+            "description": "Launch/Close VSCode and Chrome",
+            "programs": [
+                {
+                    "program_path": "C:\\Users\\giled\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
+                    "process_name": "Code.exe"
+                },
+                {
+                    "program_path": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+                    "process_name": "chrome.exe"
+                }
+            ]
+        },
+        "3": {
+            "name": "Auto Clicker",
+            "type": "autoclicker",
+            "description": "High-speed auto clicker",
+            "clicks": 19000,
+            "delay": 0.00001
+        },
+        "4": {
+            "name": "Office Suite",
+            "type": "program",
+            "description": "Launch/Close Word and Excel",
+            "programs": [
+                {
+                    "program_path": "C:\\Program Files\\Microsoft Office\\root\\Office16\\WINWORD.EXE",
+                    "process_name": "WINWORD.EXE"
+                },
+                {
+                    "program_path": "C:\\Program Files\\Microsoft Office\\root\\Office16\\EXCEL.EXE",
+                    "process_name": "EXCEL.EXE"
+                }
+            ]
+        },
+        "5": {
+            "name": "Custom Script 1",
+            "type": "script",
+            "description": "Run a custom Python script",
+            "script_path": "scripts/custom1.py"
+        },
+        "6": {
+            "name": "Custom Script 2",
+            "type": "script",
+            "description": "Run a custom Python script",
+            "script_path": "scripts/custom2.py"
+        },
+        "7": {
+            "name": "Gaming Mode",
+            "type": "program",
+            "description": "Launch/Close Steam and Discord",
+            "programs": [
+                {
+                    "program_path": "C:\\Program Files (x86)\\Steam\\Steam.exe",
+                    "process_name": "Steam.exe"
+                },
+                {
+                    "program_path": "C:\\Users\\giled\\AppData\\Local\\Discord\\Update.exe",
+                    "process_name": "Discord.exe"
+                }
+            ]
+        },
+        "8": {
+            "name": "Custom Program 2",
+            "type": "program",
+            "description": "Launch/Close Custom Programs",
+            "programs": [
+                {
+                    "program_path": "",
+                    "process_name": ""
+                }
+            ]
+        },
+        "9": {
+            "name": "Custom Program 3",
+            "type": "program",
+            "description": "Launch/Close Custom Programs",
+            "programs": [
+                {
+                    "program_path": "",
+                    "process_name": ""
+                }
+            ]
+        }
+    }
+} 
