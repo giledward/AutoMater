@@ -1,3 +1,4 @@
-keyboard>=0.13.5
-mouse>=0.7.1
-psutil>=5.9.0 
+keyboard==0.13.5
+mouse==0.7.1
+psutil==5.9.5
+customtkinter==5.2.0 

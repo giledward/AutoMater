@@ -9,25 +9,33 @@ import json
 import subprocess
 import os
 import psutil
+from modern_gui import ModernGUI
+import threading
+from queue import Queue
 
 class ModernSelector:
     def __init__(self):
         self.root = tk.Tk()
         self.root.withdraw()
-        
-        # Initialize modes dictionary
         self.modes = {i: False for i in range(10)}
         self.processes = {}
-        
-        # Load configuration
+        self.command_queue = Queue()
         self.load_config()
-        
-        # Set DPI awareness for crisp rendering
         try:
             windll.shcore.SetProcessDpiAwareness(1)
         except:
             pass
+        self.setup_gui()
+        self.root.after(100, self.process_queue)
 
+    def setup_gui(self):
+        self.gui = ModernGUI()
+        self.gui.root.withdraw()
+        self.gui.root.protocol("WM_DELETE_WINDOW", self.on_gui_close)
+
+    def on_gui_close(self):
+        self.gui.root.withdraw()
+        
     def load_config(self):
         try:
             with open('config.json', 'r') as f:
@@ -36,16 +44,32 @@ class ModernSelector:
             print("Configuration file not found. Using default settings.")
             self.config = {"modes": {}}
 
-    def create_popup(self):
-        # Destroy existing popup if it exists
+    def process_queue(self):
+        try:
+            while True:
+                command = self.command_queue.get_nowait()
+                if command == "gui":
+                    self.show_gui()
+                elif command == "cmd":
+                    self.show_command_line()
+        except:
+            pass
+        self.root.after(100, self.process_queue)
+
+    def show_gui(self):
+        if not self.gui.root.winfo_exists():
+            self.setup_gui()
+        self.gui.root.deiconify()
+        self.gui.root.lift()
+        self.gui.root.focus_force()
+
+    def show_command_line(self):
         if hasattr(self, 'popup') and self.popup.winfo_exists():
             self.popup.destroy()
 
-        # Create new popup
         self.popup = tk.Toplevel(self.root)
-        self.popup.overrideredirect(True)  # Remove window decorations
+        self.popup.overrideredirect(True)
         
-        # Calculate center position
         screen_width = self.popup.winfo_screenwidth()
         screen_height = self.popup.winfo_screenheight()
         window_width = 300
@@ -55,31 +79,28 @@ class ModernSelector:
         
         self.popup.geometry(f"{window_width}x{window_height}+{x}+{y}")
         
-        # Create main frame with modern styling
         main_frame = ttk.Frame(self.popup)
         main_frame.pack(fill='both', expand=True)
         
-        # Configure modern styles
         style = ttk.Style()
         style.configure("Modern.TEntry", padding=10)
         
-        # Create and configure the entry widget
         self.entry = ttk.Entry(main_frame, style="Modern.TEntry", font=('Segoe UI', 12))
         self.entry.pack(fill='both', expand=True, padx=10, pady=10)
         
-        # Focus and select all text
         self.entry.focus_force()
-        
-        # Bind events
         self.entry.bind('<Return>', self.handle_input)
         self.entry.bind('<Escape>', lambda e: self.popup.destroy())
         
-        # Make window stay on top
         self.popup.attributes('-topmost', True)
-        
-        # Add subtle shadow effect
         self.popup.configure(bg='#222222')
         main_frame.configure(style='Modern.TFrame')
+
+    def create_popup(self):
+        self.command_queue.put("gui")
+
+    def create_command_popup(self):
+        self.command_queue.put("cmd")
 
     def handle_input(self, event=None):
         try:
@@ -91,7 +112,8 @@ class ModernSelector:
         except ValueError:
             print("Invalid input. Please enter a number.")
         finally:
-            self.popup.destroy()
+            if hasattr(self, 'popup'):
+                self.popup.destroy()
 
     def execute_action(self, num):
         mode_config = self.config["modes"].get(str(num))
@@ -152,9 +174,9 @@ class ModernSelector:
                 self.modes[num] = True
                 print(f"Starting {mode_config['name']}")
                 try:
-                    time.sleep(1)  # Brief delay before starting
+                    time.sleep(1)
                     for _ in range(clicks):
-                        if not self.modes[num]:  # Check if mode was disabled
+                        if not self.modes[num]:
                             break
                         mouse.click()
                         time.sleep(delay)
@@ -182,9 +204,11 @@ class ModernSelector:
                 print(f"Stopped {mode_config['name']}")
 
     def run(self):
-        # Register global hotkey
         keyboard.add_hotkey('shift+f12', self.create_popup, suppress=True)
-        print("Running... Press Shift + F12 to open selector.")
+        keyboard.add_hotkey('shift+f1', self.create_command_popup, suppress=True)
+        print("Running... Press:")
+        print("- Shift + F12 to open modern GUI")
+        print("- Shift + F1 to open command line interface")
         print("\nAvailable modes:")
         for num, mode in self.config["modes"].items():
             print(f"{num}: {mode['name']} - {mode['description']}")

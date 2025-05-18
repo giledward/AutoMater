@@ -7,14 +7,8 @@
         },
         "1": {
             "name": "Chrome",
-            "type": "program",
             "description": "Launch/Close Chrome",
-            "programs": [
-                {
-                    "program_path": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
-                    "process_name": "chrome.exe"
-                }
-            ]
+            "type": "program"
         },
         "2": {
             "name": "Development Environment",
@@ -36,7 +30,7 @@
             "type": "autoclicker",
             "description": "High-speed auto clicker",
             "clicks": 19000,
-            "delay": 0.00001
+            "delay": 1e-05
         },
         "4": {
             "name": "Office Suite",
@@ -103,4 +97,4 @@
             ]
         }
     }
-} 
+}

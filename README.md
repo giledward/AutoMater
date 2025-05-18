@@ -1,6 +1,54 @@
 # AutoMater
 
-A modern hotkey-driven task automation tool with a sleek interface. Quickly control programs and automate tasks through a simple popup menu.
+🚧 **Work in Progress** 🚧
+
+AutoMater is a powerful automation tool with a modern GUI interface. This project is currently under active development.
+
+## Current Features
+- Modern dark-themed GUI interface
+- 10 configurable automation modes
+- Real-time status indicators
+- Configuration saving/loading system
+- Support for multiple automation types:
+  - Program launcher
+  - Auto-clicker
+  - Script runner
+
+## Installation
+1. Clone the repository
+2. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+## Running the Application
+```bash
+python modern_gui.py
+```
+
+## Upcoming Features
+- [ ] Integration with hotkey system (Shift+F12)
+- [ ] Advanced configuration options for each mode type
+- [ ] Process monitoring and management
+- [ ] Real-time mode status updates
+- [ ] Detailed program path configuration
+- [ ] Auto-clicker settings customization
+- [ ] Script path management
+- [ ] System tray integration
+- [ ] Keyboard shortcut customization
+
+## Requirements
+- Python 3.7+
+- Dependencies listed in requirements.txt
+
+## Contributing
+This project is still in development. Feel free to contribute by submitting issues or pull requests.
+
+## License
+[MIT License](LICENSE)
+
+---
+⚠️ Note: This is an early version of the software. Features and interface may change significantly as development continues.
 
 ## Features
 
@@ -36,6 +84,8 @@ pip install keyboard mouse psutil
 
 ## Configuration
 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 Edit `config.json` to customize:
 - Program paths
 - Process names
@@ -43,11 +93,7 @@ Edit `config.json` to customize:
 - Script locations
 - Mode descriptions
 
-## Requirements
-
-- Python 3.6+
-- Windows OS
-- Administrative privileges (for some features)
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 ## Quick Start
 
