@@ -77,10 +77,23 @@ pip install keyboard mouse psutil
 - `0`: Exit application
 - `1`: Chrome
 - `2`: Notepad
-- `3`: Auto-clicker (19,000 clicks)
+- `3`: Camera Control
 - `4`: Calculator
 - `5-6`: Custom scripts
 - `7-9`: Custom programs
+
+## Camera Control (Mode 3)
+
+The camera control feature provides:
+- Real-time camera feed display
+- Hand tracking using MediaPipe
+- Gesture-based controls
+- Automatic hand detection and tracking
+
+Requirements for camera mode:
+- Webcam access
+- MediaPipe library (`pip install mediapipe`)
+- OpenCV library (`pip install opencv-python`)
 
 ## Configuration
 

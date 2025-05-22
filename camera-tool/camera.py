@@ -46,6 +46,10 @@ except Exception as e:
 mode = 0
 prev_x, prev_y = 0, 0
 smoothing = 0.5
+last_click_time = 0
+CLICK_DELAY = 0.2  # 200ms delay between clicks
+prev_hand_state = False  # Track if hand was closed in previous frame
+hand_close_time = 0  # Track when hand was closed
 
 def count_fingers(hand_landmarks):
     tip_ids = [4, 8, 12, 16, 20]
@@ -65,6 +69,10 @@ def count_fingers(hand_landmarks):
     
     return fingers
 
+def is_hand_closed(fingers):
+    # Hand is considered closed if no fingers are raised
+    return sum(fingers) == 0
+
 def move_mouse(index_finger_x, index_finger_y, smooth=True):
     global prev_x, prev_y
     
@@ -80,34 +88,31 @@ def move_mouse(index_finger_x, index_finger_y, smooth=True):
     mouse.move(screen_x, screen_y)
 
 def handle_click_hand(fingers):
-    if fingers[0] == 1:
-        if not mouse.is_pressed('left'):
-            mouse.press('left')
-    else:
-        if mouse.is_pressed('left'):
-            mouse.release('left')
+    global last_click_time, prev_hand_state, hand_close_time
+    current_time = time.time()
     
-    if fingers[1] == 1 and fingers[2] == 1:
-        if not mouse.is_pressed('right'):
-            mouse.press('right')
-    else:
-        if mouse.is_pressed('right'):
-            mouse.release('right')
+    if current_time - last_click_time < CLICK_DELAY:
+        return
     
-    if sum(fingers) == 5:
-        if not mouse.is_pressed('left'):
-            mouse.press('left')
-    elif sum(fingers) < 5 and not fingers[0]:
-        if mouse.is_pressed('left'):
-            mouse.release('left')
+    hand_closed = is_hand_closed(fingers)
+    
+    # If hand was just closed
+    if hand_closed and not prev_hand_state:
+        hand_close_time = current_time
+    
+    # If hand was just opened and was closed for less than 0.3 seconds
+    elif not hand_closed and prev_hand_state:
+        if current_time - hand_close_time < 0.3:  # Quick close-open gesture
+            mouse.click()
+            last_click_time = current_time
+    
+    prev_hand_state = hand_closed
 
 print("Hand tracking started. Use your hands to control:")
 print("Right hand:")
 print("- Move index finger to control cursor")
 print("Left hand:")
-print("- Raise thumb to left click")
-print("- Raise index and middle fingers for right click")
-print("- Raise all fingers to drag")
+print("- Quick close and open hand to click")
 print("Press Ctrl+C to exit")
 
 try:
