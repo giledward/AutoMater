@@ -26,11 +26,11 @@
             ]
         },
         "3": {
-            "name": "Auto Clicker",
-            "type": "autoclicker",
-            "description": "High-speed auto clicker",
-            "clicks": 19000,
-            "delay": 1e-05
+            "name": "Camera Control",
+            "type": "script",
+            "description": "Run camera control script",
+            "script_path": "camera-tool/camera.py",
+            "python_path": "C:\\Users\\giled\\AppData\\Local\\Programs\\Python\\Python310\\python.exe"
         },
         "4": {
             "name": "Office Suite",

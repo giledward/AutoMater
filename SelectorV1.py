@@ -194,7 +194,8 @@ class ModernSelector:
                 
             if not self.modes[num]:
                 try:
-                    subprocess.Popen([sys.executable, script_path])
+                    python_path = mode_config.get("python_path", sys.executable)
+                    subprocess.Popen([python_path, script_path])
                     self.modes[num] = True
                     print(f"Started {mode_config['name']}")
                 except Exception as e:
