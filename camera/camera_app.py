@@ -8,6 +8,7 @@ from collections import Counter, deque
 
 import cv2
 
+from .cursor_controller import CursorController
 from .gesture_detector import GestureDetector
 from .hand_tracker import HandTracker
 
@@ -18,6 +19,7 @@ OVERLAY_ENABLED = True
 GESTURE_WINDOW_SIZE = 10
 GESTURE_CONFIRM_THRESHOLD = 6
 GESTURE_COOLDOWN_SECONDS = 0.5
+FIST_LOCK_TOGGLE_COOLDOWN_SECONDS = 1.0
 
 HAND_CONNECTIONS = (
     (0, 1), (1, 2), (2, 3), (3, 4),
@@ -72,12 +74,14 @@ def main() -> int:
 
     tracker = None
     detector = GestureDetector()
+    cursor = CursorController()
 
     gesture_history: deque[str] = deque(maxlen=GESTURE_WINDOW_SIZE)
     last_trigger_times: dict[str, float] = {}
     confirmed_gesture = "NONE"
     raw_gesture = "NONE"
     raw_confidence = 0.0
+    last_lock_toggle_time = 0.0
 
     fps = 0.0
     frame_counter = 0
@@ -91,22 +95,34 @@ def main() -> int:
                 print("Error: Failed to read a frame from the camera.", file=sys.stderr)
                 return 1
 
+            frame_h, frame_w = frame.shape[:2]
             hands = tracker.detect(frame)
             draw_landmarks(frame, hands)
 
             raw_gesture, raw_confidence = detector.classify(hands)
             gesture_history.append(raw_gesture)
 
+            now = time.monotonic()
             maybe_confirmed = confirm_stable_gesture(
                 history=gesture_history,
                 last_trigger_times=last_trigger_times,
-                now=time.monotonic(),
+                now=now,
             )
             if maybe_confirmed != "NONE":
                 confirmed_gesture = maybe_confirmed
 
+            if (
+                maybe_confirmed == "FIST"
+                and now - last_lock_toggle_time >= FIST_LOCK_TOGGLE_COOLDOWN_SECONDS
+            ):
+                cursor.toggle_locked()
+                last_lock_toggle_time = now
+
+            if hands:
+                primary_hand = max(hands, key=lambda hand: hand.confidence)
+                cursor.update(primary_hand, frame_w=frame_w, frame_h=frame_h)
+
             frame_counter += 1
-            now = time.monotonic()
             elapsed = now - last_fps_time
             if elapsed >= 1.0:
                 fps = frame_counter / elapsed
@@ -139,6 +155,17 @@ def main() -> int:
                     cv2.FONT_HERSHEY_SIMPLEX,
                     0.7,
                     (255, 255, 255),
+                    2,
+                )
+                lock_text = "LOCKED" if cursor.locked else "UNLOCKED"
+                lock_color = (0, 0, 255) if cursor.locked else (0, 255, 0)
+                cv2.putText(
+                    frame,
+                    f"Cursor: {lock_text}",
+                    (10, 120),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    0.7,
+                    lock_color,
                     2,
                 )
 

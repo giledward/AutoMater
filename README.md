@@ -37,6 +37,18 @@ python -m camera.camera_app
 ```
 3. Exit with `ESC`, `Q`, or by closing the camera window.
 
+## Cursor Control
+- Camera Mode now moves the system cursor from the tracked hand (index fingertip).
+- Run with:
+```bash
+python -m camera.camera_app
+```
+- Show a **stable FIST** gesture to toggle cursor lock/unlock for safety.
+- Tuning constants live in `camera/cursor_controller.py`:
+  - `EMA_ALPHA`
+  - `DEADZONE_PIXELS`
+  - `SPEED_SCALE`
+
 
 ## Upcoming Features
 - [ ] Integration with hotkey system (Shift+F12)
