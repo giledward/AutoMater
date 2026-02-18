@@ -26,6 +26,18 @@ pip install -r requirements.txt
 python modern_gui.py
 ```
 
+## Camera Mode Quickstart
+1. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
+2. Run Camera Mode standalone:
+```bash
+python -m camera.camera_app
+```
+3. Exit with `ESC`, `Q`, or by closing the camera window.
+
+
 ## Upcoming Features
 - [ ] Integration with hotkey system (Shift+F12)
 - [ ] Advanced configuration options for each mode type
