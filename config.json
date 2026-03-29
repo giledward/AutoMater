@@ -54,10 +54,10 @@
             "script_path": "scripts/custom1.py"
         },
         "6": {
-            "name": "Custom Script 2",
+            "name": "Pearson Screenshot Session",
             "type": "script",
-            "description": "Run a custom Python script",
-            "script_path": "scripts/custom2.py"
+            "description": "Start/stop screenshot capture helper",
+            "script_path": "screenshot_workflow.py"
         },
         "7": {
             "name": "Gaming Mode",
@@ -96,5 +96,10 @@
                 }
             ]
         }
+    },
+    "screenshot_workflow": {
+        "capture_hotkey": "ctrl+shift+s",
+        "stop_hotkey": "ctrl+shift+e",
+        "output_root": "captures/pearson_study"
     }
 }

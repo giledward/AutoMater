@@ -49,6 +49,41 @@ python -m camera.camera_app
   - `DEADZONE_PIXELS`
   - `SPEED_SCALE`
 
+## Pearson Screenshot Workflow Helper
+
+AutoMater now includes a Windows-friendly screenshot session tool designed for manual study workflows.
+
+### What it does
+- Starts a dedicated capture session
+- Lets you select one screen region one time at session start
+- Captures only when you press your configured hotkey
+- Saves into a timestamped session folder
+- Uses sequential file names (`001.png`, `002.png`, ...)
+- Plays a lightweight confirmation beep + console message per capture
+- Ends on a stop hotkey and prints a capture count summary
+
+### Run directly
+```bash
+python screenshot_workflow.py
+```
+
+### Or run from AutoMater mode configuration
+`config.json` mode `6` is preconfigured to run `screenshot_workflow.py`.
+
+### Configuration
+Edit the `screenshot_workflow` section in `config.json`:
+```json
+"screenshot_workflow": {
+  "capture_hotkey": "ctrl+shift+s",
+  "stop_hotkey": "ctrl+shift+e",
+  "output_root": "captures/pearson_study"
+}
+```
+
+Notes:
+- This helper does **not** automate websites or bypass protections.
+- It only captures a user-selected region when you trigger the hotkey.
+
 
 ## Upcoming Features
 - [ ] Integration with hotkey system (Shift+F12)
@@ -170,7 +205,6 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - Built with Python's tkinter for UI
 - Uses keyboard and mouse libraries for automation
 - Inspired by the need for quick-access automation tools
-
 
 
 
